@@ -23,8 +23,8 @@ export function Navbar() {
             </span>
           </a>
           <div className="hidden sm:block">
-            <Button asChild>
-              <Link href="/appointment">Book Appointment</Link>
+            <Button>
+              render={<Link href="/appointment">Book Appointment</Link>}
             </Button>
           </div>
           <ThemeToggle />

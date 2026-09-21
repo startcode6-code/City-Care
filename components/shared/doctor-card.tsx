@@ -15,10 +15,8 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
           <p className="mt-1 text-sm text-muted-foreground">{doctor.role}</p>
           <p className="text-sm text-muted-foreground">{doctor.years} years of experience</p>
           <div className="mt-auto w-full pt-5">
-            <Button asChild variant="outline" size="sm" className="w-full">
-              <Link href={`/doctors/${doctor.slug}`} aria-label={`View profile of ${doctor.name}`}>
-                View Profile
-              </Link>
+            <Button  variant="outline" size="sm" className="w-full">
+              render={<Link href={`/doctors/${doctor.slug}`}>View Profile</Link>}
             </Button>
           </div>
         </CardContent>

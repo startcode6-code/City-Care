@@ -12,7 +12,7 @@ export function DepartmentGrid({ tone = "card" }: { tone?: "background" | "card"
       <SectionHeading
         title="Our Departments"
         intro="Pick a department to see the services it offers and the doctors who lead it."
-        href="/departments"
+        href="#/departments"
       />
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {departments.map((d) => (

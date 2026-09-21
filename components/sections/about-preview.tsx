@@ -19,8 +19,8 @@ export function AboutPreview() {
             Every department shares the same records, the same diagnostic lab and the same promise: you will always
             know what is happening and what comes next.
           </p>
-          <Button asChild className="mt-7">
-            <Link href="/about">Learn More</Link>
+          <Button className="mt-7">
+            render={<Link href="/about">Learn more</Link>}
           </Button>
         </div>
         <ImageSlot

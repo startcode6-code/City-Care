@@ -26,10 +26,8 @@ export function PackageCard({ pkg, showTests = true }: { pkg: HealthPackage; sho
             </ul>
           )}
           <div className="mt-auto pt-6">
-            <Button asChild variant="outline" className="w-full">
-              <Link href={`/appointment?package=${pkg.slug}`} aria-label={`Book the ${pkg.name} package`}>
-                Book this package
-              </Link>
+            <Button variant="outline" className="w-full">
+              render={<Link href={`/appointment?pkg=${pkg.slug}`}>Book Now</Link>}
             </Button>
           </div>
         </CardContent>

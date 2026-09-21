@@ -46,10 +46,8 @@ export function MobileNav() {
           ))}
         </nav>
         <div className="mt-auto space-y-3">
-          <Button asChild className="w-full">
-            <Link href="/appointment" onClick={() => setOpen(false)}>
-              Book Appointment
-            </Link>
+          <Button className="w-full">
+          render={<Link href="/appointment">Book Appointment</Link>}
           </Button>
           <a href={site.phoneHref} className="block py-2 text-center text-sm font-semibold text-destructive">
             Emergency: {site.phone}

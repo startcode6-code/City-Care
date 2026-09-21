@@ -76,12 +76,15 @@ export function Header() {
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
 
-          <Button asChild className="hidden sm:inline-flex">
-            <Link href="/appointment">
-              <CalendarCheck aria-hidden />
-              Book Appointment
-            </Link>
-          </Button>
+        <Button
+        className="hidden sm:inline-flex"
+        render={
+          <Link href="/appointment" />
+        }
+      >
+        <CalendarCheck aria-hidden />
+        Book Appointment
+      </Button>
 
           {/* Mobile menu */}
           <Sheet>
@@ -147,7 +150,7 @@ export function Header() {
               <CalendarCheck aria-hidden />
               Book Appointment
             </SheetClose>
-                <Button asChild size="lg" variant="outline">
+                <Button  size="lg" variant="outline">
                   <a href={site.phoneHref}>
                     <Phone aria-hidden />
                     Emergency Call
