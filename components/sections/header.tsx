@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalendarCheck, HeartPulse, Menu, Phone } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants  } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -85,16 +85,22 @@ export function Header() {
 
           {/* Mobile menu */}
           <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden"
-                aria-label="Open menu"
-              >
-                <Menu aria-hidden />
-              </Button>
-            </SheetTrigger>
+
+            
+          <SheetTrigger
+             render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                 aria-label="Open menu"
+         />
+       }
+        >
+        <Menu aria-hidden />
+        </SheetTrigger>
+
+
             <SheetContent side="right" className="w-72">
               <SheetHeader>
                 <SheetTitle>{site.name}</SheetTitle>
@@ -104,34 +110,43 @@ export function Header() {
                 <ul className="flex flex-col">
                   {nav.map((item) => (
                     <li key={item.href}>
-                      <SheetClose asChild>
-                        <Link
-                          href={item.href}
-                          aria-current={isActive(item.href) ? "page" : undefined}
-                          className={cn(
+
+                  <SheetClose
+                    nativeButton={false}
+                    render={
+                      <Link
+                        href={item.href}
+                        aria-current={isActive(item.href) ? "page" : undefined}
+                        className={cn(
                             "block rounded-md px-3 py-3 text-base font-medium transition-colors hover:bg-accent",
                             isActive(item.href)
-                              ? "text-primary"
-                              : "text-foreground",
-                          )}
-                        >
-                          {item.label}
-                        </Link>
-                      </SheetClose>
-                    </li>
+                            ? "text-primary"
+                            : "text-foreground",
+                        )}
+                        />
+                    }
+                    >
+                    {item.label}
+                    </SheetClose>
+                  </li>
                   ))}
                 </ul>
               </nav>
 
               <div className="mt-auto flex flex-col gap-3 p-4">
-                <SheetClose asChild>
-                  <Button asChild size="lg">
-                    <Link href="/appointment">
-                      <CalendarCheck aria-hidden />
-                      Book Appointment
-                    </Link>
-                  </Button>
-                </SheetClose>
+
+             <SheetClose
+              nativeButton={false}
+              render={
+                <Link
+                  href="/appointment"
+                  className={buttonVariants({ size: "lg" })}
+                />
+              }
+            >
+              <CalendarCheck aria-hidden />
+              Book Appointment
+            </SheetClose>
                 <Button asChild size="lg" variant="outline">
                   <a href={site.phoneHref}>
                     <Phone aria-hidden />
@@ -139,7 +154,11 @@ export function Header() {
                   </a>
                 </Button>
               </div>
+
+
             </SheetContent>
+
+
           </Sheet>
         </div>
       </Container>
