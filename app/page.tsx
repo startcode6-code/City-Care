@@ -1,19 +1,29 @@
-import { Button } from "@/components/ui/button"
+import { Hero } from "@/components/sections/hero";
+import { HighlightStrip } from "@/components/sections/highlight-strip";
+import { AboutPreview } from "@/components/sections/about-preview";
+import { DepartmentGrid } from "@/components/sections/department-grid";
+import { FeaturedDoctors } from "@/components/sections/featured-doctors";
+import { FacilitiesPreview } from "@/components/sections/facilities-preview";
+import { PackagesPreview } from "@/components/sections/packages-preview";
+import { Testimonials } from "@/components/sections/testimonials";
+import { AppointmentCta } from "@/components/sections/appointment-cta";
+import { LocationMap } from "@/components/sections/location-map";
+import {Header } from "@/components/sections/header";
 
-export default function Page() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
-  )
+    <>
+      <Header />
+      <Hero />
+      <HighlightStrip />
+      <AboutPreview />
+      <DepartmentGrid />
+      <FeaturedDoctors />
+      <FacilitiesPreview />
+      <PackagesPreview />
+      <Testimonials />
+      <AppointmentCta />
+      <LocationMap />
+    </>
+  );
 }
