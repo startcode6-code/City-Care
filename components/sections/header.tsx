@@ -19,9 +19,9 @@ import { site } from "@/lib/site";
 
 const nav = [
   { label: "Home", href: "/" },
-  { label: "Departments", href: "/departments" },
-  { label: "Doctors", href: "/doctors" },
   { label: "About", href: "/about" },
+  { label: "Service", href: "/service" },
+  { label: "Doctors", href: "/doctors" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -77,6 +77,7 @@ export function Header() {
           <ThemeToggle />
 
         <Button
+        nativeButton={false}
         className="hidden sm:inline-flex"
         render={
           <Link href="/appointment" />
@@ -90,18 +91,15 @@ export function Header() {
           <Sheet>
 
             
-          <SheetTrigger
-             render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                 aria-label="Open menu"
-         />
-       }
-        >
-        <Menu aria-hidden />
-        </SheetTrigger>
+            <SheetTrigger
+              render={
+                <Button 
+                variant="ghost" size="icon" className="lg:hidden" />
+              }
+            >
+              <Menu className="size-5" aria-hidden />
+              <span className="sr-only">Open menu</span>
+            </SheetTrigger>
 
 
             <SheetContent side="right" className="w-72">
@@ -111,8 +109,7 @@ export function Header() {
 
               <nav aria-label="Mobile" className="px-4">
                 <ul className="flex flex-col">
-                  {nav.map((item) => (
-                    <li key={item.href}>
+                  {nav.map((item) => ( <li key={item.href}>
 
                   <SheetClose
                     nativeButton={false}
@@ -150,7 +147,9 @@ export function Header() {
               <CalendarCheck aria-hidden />
               Book Appointment
             </SheetClose>
-                <Button  size="lg" variant="outline">
+                <Button 
+                  nativeButton={false}
+                  size="lg" variant="outline">
                   <a href={site.phoneHref}>
                     <Phone aria-hidden />
                     Emergency Call

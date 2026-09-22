@@ -9,6 +9,7 @@ import { Testimonials } from "@/components/sections/testimonials";
 import { AppointmentCta } from "@/components/sections/appointment-cta";
 import { LocationMap } from "@/components/sections/location-map";
 import {Header } from "@/components/sections/header";
+import { Footer } from "@/components/sections/footer";
 
 export default function HomePage() {
   return (
@@ -24,6 +25,7 @@ export default function HomePage() {
       <Testimonials />
       <AppointmentCta />
       <LocationMap />
+      <Footer/>
     </>
   );
 }

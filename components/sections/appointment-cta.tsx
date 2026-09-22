@@ -14,16 +14,22 @@ export function AppointmentCta() {
             Choose a department and a time that suits you. We will confirm by phone or email.
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <Button  size="lg" className="bg-card text-primary hover:bg-card/90">
-              render={<Link href="/appointment">Book Appointment</Link>}
+
+            <Button 
+            nativeButton={false}
+            render={<Link href="/appointment"/>}
+            size="lg" className="bg-card text-primary hover:bg-card/90">
+              Book Appointment
             </Button>
+
             <Button
-              
+              nativeButton={false}
+              render={<a href={site.phoneHref}></a>}
               size="lg"
               variant="outline"
               className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
-             render={<a href={site.phoneHref}>Emergency Call</a>}
+              Emergency Call
             </Button>
           </div>
         </div>

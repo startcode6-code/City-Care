@@ -14,11 +14,20 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
           <p className="text-sm font-medium text-primary">{doctor.department}</p>
           <p className="mt-1 text-sm text-muted-foreground">{doctor.role}</p>
           <p className="text-sm text-muted-foreground">{doctor.years} years of experience</p>
+          
           <div className="mt-auto w-full pt-5">
-            <Button  variant="outline" size="sm" className="w-full">
-              render={<Link href={`/doctors/${doctor.slug}`}>View Profile</Link>}
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full"
+              nativeButton={false}
+              render={<Link href={`/doctors/${doctor.slug}`} />}
+            >
+              View Profile
             </Button>
           </div>
+
+
         </CardContent>
       </Card>
     </li>

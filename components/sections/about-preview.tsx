@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/shared/section";
-import { ImageSlot } from "@/components/shared/image-slot";
+import  Image from "next/image";
+
 
 export function AboutPreview() {
   return (
@@ -19,14 +20,19 @@ export function AboutPreview() {
             Every department shares the same records, the same diagnostic lab and the same promise: you will always
             know what is happening and what comes next.
           </p>
-          <Button className="mt-7">
-            render={<Link href="/about">Learn more</Link>}
+          <Button 
+          nativeButton ={false}
+           render={<Link href="/about"></Link>}
+          className="mt-7">
+            Learn more
           </Button>
         </div>
-        <ImageSlot
-          name="hospital-building"
+        <Image
+          src="/images/pexels-supplier-gorden-ready-stok-minimalis-21695059-7335565.jpg"
+          width={1200}
+          height={900}
+          priority
           alt="The St. Jude's General Hospital building"
-          icon={Building2}
           className="aspect-[16/10] rounded-xl border"
         />
       </div>

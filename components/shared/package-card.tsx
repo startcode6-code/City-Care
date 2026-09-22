@@ -26,8 +26,12 @@ export function PackageCard({ pkg, showTests = true }: { pkg: HealthPackage; sho
             </ul>
           )}
           <div className="mt-auto pt-6">
-            <Button variant="outline" className="w-full">
-              render={<Link href={`/appointment?pkg=${pkg.slug}`}>Book Now</Link>}
+            <Button
+            nativeButton={false}  
+             variant="outline" className="w-full" 
+             render={<Link href={`/appointment?pkg=${pkg.slug}`}/>}
+             >
+              Book Now
             </Button>
           </div>
         </CardContent>

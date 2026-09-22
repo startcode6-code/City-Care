@@ -6,6 +6,7 @@ import { ImageSlot } from "@/components/shared/image-slot";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section, SectionHeading } from "@/components/shared/section";
 import { AppointmentCta } from "@/components/sections/appointment-cta";
+import Image from "next/image";
 
 export const metadata: Metadata = { title: "About Us" };
 
@@ -44,27 +45,36 @@ export default function AboutPage() {
       />
 
       <Section>
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <ImageSlot
-            name="hospital-building"
-            alt="The St. Jude's General Hospital building"
-            icon={Building2}
-            className="aspect-[4/3] rounded-xl border"
-          />
-          <div className="space-y-4 text-muted-foreground">
-            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Our story</h2>
-            <p>
-              We started with a simple rule: nobody should have to repeat their medical history three times. That rule
-              shaped how we built the hospital, with departments on the same floors, shared records and a single front
-              desk for appointments.
-            </p>
-            <p>
-              Over the years we added an intensive care unit, a diagnostic lab that reports most results the same day,
-              and a 24-hour Emergency Wing. The team has grown, but the rule has not changed.
-            </p>
-          </div>
-        </div>
-      </Section>
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <Image
+        alt="The St. Jude's General Hospital building"
+        className="aspect-[4/3] w-full rounded-xl border object-cover"
+        src="/images/pexels-supplier-gorden-ready-stok-minimalis-21695059-7335565.jpg"
+        width={1200}
+        height={900}
+        priority
+      />
+
+    <div className="space-y-4 text-muted-foreground">
+      <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+        Our story
+      </h2>
+
+      <p>
+        We started with a simple rule: nobody should have to repeat their
+        medical history three times. That rule shaped how we built the
+        hospital, with departments on the same floors, shared records and a
+        single front desk for appointments.
+      </p>
+
+      <p>
+        Over the years we added an intensive care unit, a diagnostic lab that
+        reports most results the same day, and a 24-hour Emergency Wing. The
+        team has grown, but the rule has not changed.
+      </p>
+    </div>
+  </div>
+</Section>
 
       <Section tone="card">
         <SectionHeading title="How we work" />

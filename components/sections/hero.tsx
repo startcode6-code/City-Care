@@ -38,17 +38,24 @@ export function Hero() {
             team on duty every hour of the day.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button size="lg" render={<Link href="/appointment">Book Appointment</Link>}>
-              
+
+            <Button 
+              size="lg"
+              nativeButton={false} 
+             render={<Link href="/appointment">Book Appointment</Link>}>
+        
             </Button>
 
             <Button
               size="lg"
+              
               variant="outline"
               className="border-primary/40 bg-background/70 text-primary hover:bg-primary/5 hover:text-primary"
             >
               <a href={site.phoneHref}>Emergency Call</a>
             </Button>
+
+
           </div>
         </div>
 
