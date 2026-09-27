@@ -5,7 +5,7 @@ import { DepartmentGrid } from "@/components/sections/department-grid";
 import { FeaturedDoctors } from "@/components/sections/featured-doctors";
 import { FacilitiesPreview } from "@/components/sections/facilities-preview";
 import { PackagesPreview } from "@/components/sections/packages-preview";
-import { Testimonials } from "@/components/sections/testimonials";
+import { Blog } from "@/components/sections/blog";
 import { AppointmentCta } from "@/components/sections/appointment-cta";
 import { LocationMap } from "@/components/sections/location-map";
 import {Header } from "@/components/sections/header";
@@ -22,7 +22,7 @@ export default function HomePage() {
       <FeaturedDoctors />
       <FacilitiesPreview />
       <PackagesPreview />
-      <Testimonials />
+      <Blog />
       <AppointmentCta />
       <LocationMap />
       <Footer/>

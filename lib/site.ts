@@ -1,7 +1,7 @@
 // Change the hospital details here and they update everywhere.
 export const site = {
-  name: "St. Jude's General Hospital",
-  short: "St. Jude's",
+  name: "K.P. SINHA MEMORIAL SUPER SPECIALITY HOSPITAL",
+  short: "K.P. Sinha Hospital",
   tagline: "General Hospital",
   phone: "+1 800 555 0199",
   phoneHref: "tel:+18005550199",

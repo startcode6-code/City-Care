@@ -7,40 +7,135 @@ export type Department = {
 
 export const departments: Department[] = [
   {
-    slug: "cardiology",
-    name: "Cardiology",
-    summary: "Heart checks, ECG and echo tests, and long-term care for blood pressure and heart disease.",
-    services: ["ECG and echocardiography", "Treadmill stress test", "Blood pressure clinic", "Cardiac rehabilitation"],
+    slug: "general-medicine-icu",
+    name: "General Medicine & ICU",
+    summary:
+      "Comprehensive medical care for adults, including diagnosis, treatment and intensive care for serious medical conditions.",
+    services: [
+      "General medical consultation",
+      "Critical care and ICU management",
+      "Fever and infection management",
+      "Diabetes and hypertension care",
+      "Respiratory and chest conditions",
+      "Medical emergency care",
+      "Patient monitoring and stabilization",
+    ],
   },
-  {
-    slug: "orthopedics",
-    name: "Orthopedics",
-    summary: "Treatment for bones, joints and sports injuries, from fractures to joint replacement.",
-    services: ["Fracture care", "Joint replacement", "Sports injury clinic", "Physiotherapy"],
-  },
-  {
-    slug: "pediatrics",
-    name: "Pediatrics",
-    summary: "Care from newborn to teen: vaccinations, growth checks and treatment for childhood illness.",
-    services: ["Newborn care", "Vaccination clinic", "Growth and nutrition", "Child emergency"],
-  },
-  {
-    slug: "neurology",
-    name: "Neurology",
-    summary: "Diagnosis and care for headaches, epilepsy, stroke recovery and nerve conditions.",
-    services: ["EEG and nerve studies", "Stroke recovery", "Migraine clinic", "Memory clinic"],
-  },
+
   {
     slug: "general-surgery",
     name: "General Surgery",
-    summary: "Planned and emergency surgery, with keyhole options where they suit the patient.",
-    services: ["Laparoscopic surgery", "Hernia and gallbladder", "Emergency surgery", "Day-care procedures"],
+    summary:
+      "Surgical treatment for common and emergency conditions with modern operative and post-operative care.",
+    services: [
+      "Laparoscopic surgery",
+      "Open surgical procedures",
+      "Hernia surgery",
+      "Gallbladder surgery",
+      "Appendix surgery",
+      "Emergency surgery",
+      "Abdominal and gastrointestinal surgery",
+      "Day-care surgical procedures",
+    ],
   },
+
   {
-    slug: "dermatology",
-    name: "Dermatology",
-    summary: "Skin, hair and nail care, from acne and allergies to minor procedures.",
-    services: ["Acne and allergy care", "Hair and scalp clinic", "Minor skin procedures", "Skin allergy testing"],
+    slug: "orthopedics",
+    name: "Orthopedics",
+    summary:
+      "Comprehensive care for bones, joints, muscles and injuries, including trauma and orthopedic surgery.",
+    services: [
+      "Fracture treatment",
+      "Joint replacement",
+      "Arthroscopy",
+      "Sports injury treatment",
+      "Bone and joint disorders",
+      "Spine and back care",
+      "Trauma and injury management",
+      "Physiotherapy and rehabilitation",
+    ],
+  },
+
+  {
+    slug: "oral-maxillofacial-surgery",
+    name: "Oral & Maxillofacial Surgery",
+    summary:
+      "Specialized surgical care for conditions affecting the mouth, jaw, face and related structures.",
+    services: [
+      "Jaw surgery",
+      "Facial trauma management",
+      "Dental and oral surgical procedures",
+      "Impacted tooth surgery",
+      "Cyst and lesion removal",
+      "Facial infection management",
+      "Reconstructive oral surgery",
+    ],
+  },
+
+  {
+    slug: "neurosurgery",
+    name: "Neurosurgery",
+    summary:
+      "Specialized surgical care for conditions affecting the brain, spine, nerves and nervous system.",
+    services: [
+      "Brain surgery",
+      "Spine surgery",
+      "Head injury management",
+      "Neuro-trauma care",
+      "Brain and spinal disorders",
+      "Emergency neurosurgical care",
+      "Post-operative neurological care",
+    ],
+  },
+
+  {
+    slug: "plastic-surgery",
+    name: "Plastic Surgery",
+    summary:
+      "Reconstructive and surgical care for injuries, wounds, burns and conditions requiring tissue restoration.",
+    services: [
+      "Reconstructive surgery",
+      "Burn injury management",
+      "Wound care and reconstruction",
+      "Scar revision",
+      "Soft tissue reconstruction",
+      "Hand and facial reconstruction",
+      "Post-trauma reconstruction",
+    ],
+  },
+
+  {
+    slug: "urology",
+    name: "Urology",
+    summary:
+      "Diagnosis and treatment of conditions affecting the urinary system and male reproductive system.",
+    services: [
+      "Kidney stone treatment",
+      "Urinary tract care",
+      "Prostate care",
+      "Urinary obstruction treatment",
+      "Urological surgery",
+      "Endoscopic procedures",
+      "Kidney and bladder disorders",
+      "Urological emergency care",
+    ],
+  },
+
+  {
+    slug: "polytrauma",
+    name: "Polytrauma",
+    summary:
+      "Coordinated emergency care for patients with multiple serious injuries requiring rapid assessment and treatment.",
+    services: [
+      "Multiple injury management",
+      "Road traffic accident care",
+      "Emergency trauma care",
+      "Fracture and orthopedic trauma",
+      "Head and spinal injury care",
+      "Critical care and stabilization",
+      "Emergency surgical intervention",
+      "Post-trauma rehabilitation",
+    ],
   },
 ];
 
@@ -265,3 +360,109 @@ export const appointmentSlots = ["9:00 AM", "10:30 AM", "12:00 PM", "2:00 PM", "
 export function departmentSlugFromName(name: string) {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
+
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  imageName: string;
+  category: string;
+  author: string;
+  publishedAt: string;
+  readTime: string;
+  summary: string;
+  content: string;
+  tags: string[];
+}
+
+export const blogPosts: BlogPost[] = [
+  {
+    slug: "importance-of-regular-health-checkups",
+    title: "Why Regular Health Checkups Are Important",
+    imageName: "blog-health-checkup",
+    category: "Health & Wellness",
+    author: "K.P. Sinha Memorial Hospital",
+    publishedAt: "2026-09-10",
+    readTime: "5 min read",
+    summary:
+      "Regular health checkups can help identify potential health concerns early and support better long-term health.",
+    content:
+      "Regular health checkups help healthcare professionals monitor important aspects of your health and identify concerns that may require further evaluation.",
+    tags: ["Health Checkup", "Preventive Care", "Wellness"],
+  },
+
+  {
+    slug: "how-to-maintain-a-healthy-heart",
+    title: "Simple Ways to Maintain a Healthy Heart",
+    imageName: "blog-heart-health",
+    category: "Cardiology",
+    author: "K.P. Sinha Memorial Hospital",
+    publishedAt: "2026-09-05",
+    readTime: "6 min read",
+    summary:
+      "Learn about everyday habits that can support cardiovascular health and overall wellbeing.",
+    content:
+      "A healthy lifestyle, regular physical activity, balanced nutrition and appropriate medical checkups can all contribute to cardiovascular health.",
+    tags: ["Heart Health", "Cardiology", "Healthy Lifestyle"],
+  },
+
+  {
+    slug: "understanding-diabetes",
+    title: "Understanding Diabetes and Its Prevention",
+    imageName: "blog-diabetes",
+    category: "Diabetes",
+    author: "K.P. Sinha Memorial Hospital",
+    publishedAt: "2026-08-28",
+    readTime: "7 min read",
+    summary:
+      "Understand the basics of diabetes, common risk factors and the importance of regular monitoring.",
+    content:
+      "Diabetes is a condition that requires appropriate medical evaluation and ongoing management. Regular monitoring and healthy lifestyle choices can play an important role in care.",
+    tags: ["Diabetes", "Health Tips", "Prevention"],
+  },
+
+  {
+    slug: "when-to-visit-emergency-department",
+    title: "When Should You Visit the Emergency Department?",
+    imageName: "blog-emergency-care",
+    category: "Emergency Care",
+    author: "K.P. Sinha Memorial Hospital",
+    publishedAt: "2026-08-20",
+    readTime: "5 min read",
+    summary:
+      "Learn about situations where immediate medical attention may be necessary.",
+    content:
+      "Some symptoms and injuries require immediate medical assessment. Knowing when to seek emergency care can help you respond quickly when urgent medical attention is needed.",
+    tags: ["Emergency", "Urgent Care", "Patient Safety"],
+  },
+
+  {
+    slug: "benefits-of-preventive-healthcare",
+    title: "The Benefits of Preventive Healthcare",
+    imageName: "blog-preventive-care",
+    category: "Preventive Care",
+    author: "K.P. Sinha Memorial Hospital",
+    publishedAt: "2026-08-15",
+    readTime: "4 min read",
+    summary:
+      "Preventive healthcare focuses on maintaining health and identifying potential concerns before they become serious.",
+    content:
+      "Preventive healthcare includes routine checkups, recommended screenings, vaccinations and healthy lifestyle practices.",
+    tags: ["Preventive Care", "Health Screening", "Wellness"],
+  },
+
+  {
+    slug: "healthy-lifestyle-for-families",
+    title: "Building a Healthier Lifestyle for Your Family",
+    imageName: "blog-family-health",
+    category: "Family Health",
+    author: "K.P. Sinha Memorial Hospital",
+    publishedAt: "2026-08-08",
+    readTime: "6 min read",
+    summary:
+      "Small everyday changes can help families build healthier habits together.",
+    content:
+      "Healthy eating, regular physical activity, adequate sleep and routine healthcare can help families maintain healthier lifestyles.",
+    tags: ["Family Health", "Healthy Living", "Wellness"],
+  },
+];

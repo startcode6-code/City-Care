@@ -16,12 +16,14 @@ import { Container } from "@/components/shared/container";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { site } from "@/lib/site";
+import  Image  from "next/image";
 
 const nav = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Service", href: "/service" },
   { label: "Doctors", href: "/doctors" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -31,9 +33,16 @@ function Logo() {
       href="/"
       className="flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-        <HeartPulse className="size-5" aria-hidden />
-      </span>
+
+        <Image 
+          src= "/images/s.m.h_logo.png"
+          alt="K.P. Sinha Memorial Hospital"
+          width={55}
+          height={55}
+          className="size-14 object-contain"
+          priority
+        />
+
       <span className="text-lg font-extrabold tracking-tight text-primary">
         {site.name}
       </span>
