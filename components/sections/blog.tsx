@@ -49,7 +49,9 @@ export function Blog() {
   };
 
   return (
-    <Section tone="card">
+    <Section tone="background"
+     className="bg-background"
+    >
       {/* Heading + Navigation */}
       <div className="flex items-center justify-between">
         <SectionHeading title="Latest Health & Medical Insights" />

@@ -5,6 +5,7 @@ import { Container } from "@/components/shared/container";
 import { ImageSlot } from "@/components/shared/image-slot";
 import { site } from "@/lib/site";
 import Image from "next/image";
+import { HeroImageSlider } from "../shared/hero_image_slider";
 
 
 
@@ -12,20 +13,13 @@ export function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-background pb-12 pt-12 sm:pt-20 lg:pb-16">
       {/* Full-bleed photo on the right */}
-      <div className="absolute inset-0 -z-20 m">
-        <Image
-        
-          src="/images/ChatGPTPM.png"
-          alt="Doctor consulting a patient at City Care Hospital"
-          fill
-          priority
-          className="object-cover object-top dark:brightness-50 dark:contrast-110"
 
-        />
-      </div>
+   
 
-      {/* White fade so the text stays readable */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-background/85 to-background/40 lg:bg-gradient-to-r lg:from-background lg:via-background/70 lg:to-transparent" />
+      <HeroImageSlider/>
+
+
+      {/* <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background" /> */}
 
       <Container>
         <div className="max-w-xl lg:pb-24 lg:pt-6">
