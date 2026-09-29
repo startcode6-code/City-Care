@@ -2,6 +2,7 @@ export type Department = {
   slug: string;
   name: string;
   summary: string;
+  images: string;
   services: string[];
 };
 
@@ -11,6 +12,7 @@ export const departments: Department[] = [
     name: "General Medicine & ICU",
     summary:
       "Comprehensive medical care for adults, including diagnosis, treatment and intensive care for serious medical conditions.",
+    images: "/images/icu.png",
     services: [
       "General medical consultation",
       "Critical care and ICU management",
@@ -27,6 +29,7 @@ export const departments: Department[] = [
     name: "General Surgery",
     summary:
       "Surgical treatment for common and emergency conditions with modern operative and post-operative care.",
+    images: "/images/general_surgery.png",  
     services: [
       "Laparoscopic surgery",
       "Open surgical procedures",
@@ -44,6 +47,7 @@ export const departments: Department[] = [
     name: "Orthopedics",
     summary:
       "Comprehensive care for bones, joints, muscles and injuries, including trauma and orthopedic surgery.",
+    images: "/images/orthopedics.png",  
     services: [
       "Fracture treatment",
       "Joint replacement",
@@ -61,6 +65,7 @@ export const departments: Department[] = [
     name: "Oral & Maxillofacial Surgery",
     summary:
       "Specialized surgical care for conditions affecting the mouth, jaw, face and related structures.",
+    images: "/images/Maxillofacial.png",  
     services: [
       "Jaw surgery",
       "Facial trauma management",
@@ -77,6 +82,7 @@ export const departments: Department[] = [
     name: "Neurosurgery",
     summary:
       "Specialized surgical care for conditions affecting the brain, spine, nerves and nervous system.",
+    images: "/images/Neurosurgery.png",  
     services: [
       "Brain surgery",
       "Spine surgery",
@@ -93,6 +99,7 @@ export const departments: Department[] = [
     name: "Plastic Surgery",
     summary:
       "Reconstructive and surgical care for injuries, wounds, burns and conditions requiring tissue restoration.",
+    images: "/images/plastice.png",  
     services: [
       "Reconstructive surgery",
       "Burn injury management",
@@ -109,6 +116,7 @@ export const departments: Department[] = [
     name: "Urology",
     summary:
       "Diagnosis and treatment of conditions affecting the urinary system and male reproductive system.",
+    images: "/images/urology.png",  
     services: [
       "Kidney stone treatment",
       "Urinary tract care",
@@ -126,6 +134,7 @@ export const departments: Department[] = [
     name: "Polytrauma",
     summary:
       "Coordinated emergency care for patients with multiple serious injuries requiring rapid assessment and treatment.",
+    images: "/images/polytrauma.png",  
     services: [
       "Multiple injury management",
       "Road traffic accident care",

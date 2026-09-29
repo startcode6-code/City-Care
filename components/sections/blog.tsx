@@ -50,7 +50,7 @@ export function Blog() {
 
   return (
     <Section tone="background"
-     className="bg-background"
+     className="bg-muted"
     >
       {/* Heading + Navigation */}
       <div className="flex items-center justify-between">
