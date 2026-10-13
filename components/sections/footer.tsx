@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { Container } from "@/components/shared/container";
+import { site } from "@/lib/site";
 
 
 type IconProps = { className?: string };
@@ -49,17 +50,17 @@ function YoutubeIcon({ className }: IconProps) {
 
 
 const siteConfig = {
-  name: "City Care Hospital",
-  description:  "Providing compassionate, world-class healthcare to our community — 24/7 emergency care, expert specialists, and modern facilities.",
-  address: "123 Wellness Road, City Care Campus",
-  phone: "+91 98765 43210",
-  email: "contact@citycarehospital.com",
+  name: `${site.name}`,
+  description: `Providing compassionate, world-class healthcare to our community — 24/7 emergency care, expert specialists, and modern facilities.`,
+  address: `${site.address}`,
+  phone: `${site.phone}`,
+  email: `${site.email}`,
   social: {
-    facebook: "https://facebook.com/citycarehospital",
-    instagram: "https://instagram.com/citycarehospital",
+    facebook: "https://www.facebook.com/profile.php?id=61574567425186",
+    instagram: "https://www.instagram.com/k.p.sinhamemorialhospital/?hl=en",
     twitter: "https://twitter.com/citycarehospital",
     linkedin: "https://linkedin.com/company/citycarehospital",
-    youtube: "https://youtube.com/@citycarehospital",
+    youtube: "https://youtube.com/@k.p.sinhamemorialhospitalpatna?si=0n48_wuOb91e62dc",
   },
 };
 

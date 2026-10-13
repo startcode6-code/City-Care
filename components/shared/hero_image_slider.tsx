@@ -34,9 +34,8 @@ export function HeroImageSlider() {
       {heroImages.map((image, index) => (
         <div
           key={image.src}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentIndex ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
         >
           <Image
             src={image.src}
@@ -44,7 +43,7 @@ export function HeroImageSlider() {
             fill
             priority={index === 0}
             sizes="100vw"
-            // className="object-cover object-top dark:brightness-50 dark:contrast-110"
+          // className="object-cover object-top dark:brightness-50 dark:contrast-110"
           />
         </div>
       ))}

@@ -14,6 +14,7 @@ export function DoctorDirectory({ doctors, departments }: { doctors: Doctor[]; d
     <>
       <div role="group" aria-label="Filter by department" className="mb-8 flex flex-wrap gap-2">
         {["All", ...departments].map((name) => (
+
           <Button
             key={name}
             type="button"
@@ -25,6 +26,7 @@ export function DoctorDirectory({ doctors, departments }: { doctors: Doctor[]; d
           >
             {name}
           </Button>
+
         ))}
       </div>
       <p className="sr-only" aria-live="polite">

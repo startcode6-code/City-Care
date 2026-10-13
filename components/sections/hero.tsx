@@ -11,12 +11,12 @@ import { HeroImageSlider } from "../shared/hero_image_slider";
 
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-background pb-12 pt-12 sm:pt-20 lg:pb-16">
+    <section className="relative isolate overflow-hidden bg-background pb-12 pt-12 sm:pt-20 lg:pb-16 h-[700px]">
       {/* Full-bleed photo on the right */}
 
-   
 
-      <HeroImageSlider/>
+
+      <HeroImageSlider />
 
 
       {/* <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background" /> */}
@@ -33,16 +33,16 @@ export function Hero() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
 
-            <Button 
+            <Button
               size="lg"
-              nativeButton={false} 
-             render={<Link href="/appointment">Book Appointment</Link>}>
-        
+              nativeButton={false}
+              render={<Link href="/appointment">Book Appointment</Link>}>
+
             </Button>
 
             <Button
               size="lg"
-              
+
               variant="outline"
               className="border-primary/40 bg-background/70 text-primary hover:bg-primary/5 hover:text-primary"
             >

@@ -1,12 +1,12 @@
 // Change the hospital details here and they update everywhere.
 export const site = {
-  name: "K.P. SINHA MEMORIAL SUPER SPECIALITY HOSPITAL",
+  name: "K.P. SINHA MEMORIAL HOSPITAL",
   short: "K.P. Sinha Hospital",
   tagline: "General Hospital",
-  phone: "+1 800 555 0199",
+  phone: "+91 9320482163",
   phoneHref: "tel:+18005550199",
   email: "care@stjudes-hospital.example",
-  address: "123 Health Street, Cityville, ST 90210",
+  address: "Bhootnath Rd, Bahadurpur Housing Colony, Mahatma Gandhi Nagar, Chitragupta Nagar, Patna, Bihar 800026",
   hours: "Mon to Sat, 8:00 AM to 8:00 PM",
   emergencyHours: "Open 24 hours, every day",
 };
