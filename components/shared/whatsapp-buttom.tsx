@@ -1,8 +1,15 @@
+"use client";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
+import { usePathname } from "next/navigation";
 
 export function WhatsAppButton() {
   const phoneNumber = "9320482163";
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <Link
