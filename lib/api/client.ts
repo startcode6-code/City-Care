@@ -3,7 +3,7 @@ import axios, {
 } from "axios";
 import { showRevokedSessionDialog } from "@/components/admin/auth-session-provider";
 
-const baseURL = process.env.NEXT_API_URL;
+const baseURL = "https://city-care-backend.onrender.com";
 
 export const api = axios.create({
     baseURL,
