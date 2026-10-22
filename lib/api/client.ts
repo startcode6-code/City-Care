@@ -3,7 +3,7 @@ import axios, {
 } from "axios";
 import { showRevokedSessionDialog } from "@/components/admin/auth-session-provider";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = process.env.NEXT_API_URL;
 
 export const api = axios.create({
     baseURL,
