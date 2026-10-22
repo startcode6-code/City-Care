@@ -1,8 +1,10 @@
 
 "use client";
-
+import { saveTokens } from "@/lib/api/client";
+import { loginAdmin } from "@/lib/api/auth";
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
     ArrowRight,
     Eye,
@@ -22,6 +24,8 @@ type AdminLoginFormProps = {
 };
 
 export function AdminLoginForm({ onLogin }: AdminLoginFormProps) {
+    const router = useRouter();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
@@ -35,7 +39,8 @@ export function AdminLoginForm({ onLogin }: AdminLoginFormProps) {
 
     const canSubmit = validEmail && password.length >= 6 && !loading;
 
-    async function handleSubmit(event: FormEvent<HTMLFormElement>,) {
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setError("");
         setNotice("");
@@ -45,27 +50,35 @@ export function AdminLoginForm({ onLogin }: AdminLoginFormProps) {
             return;
         }
 
-        if (!onLogin) {
-            setNotice(
-                "The login form is ready. Connect the authentication API to sign in.",
-            );
-            return;
-        }
 
         setLoading(true);
 
         try {
-            await onLogin({
-                email: normalizedEmail,
-                password,
-                rememberMe,
-            });
-        } catch {
+            const result = await loginAdmin({ email: normalizedEmail, password, });
+
+            if (result.success === true) {
+                const { accessToken, refreshToken, admin } = result.data;
+
+                if (!accessToken || !refreshToken) {
+                    setError("Authentication tokens were not returned.");
+                    return;
+                }
+
+                await saveTokens(accessToken, refreshToken);
+                console.log("Logged-in admin:", admin.name);
+                router.replace("/admin/dashboard");
+            } else {
+                setError(result.message || "Login failed.");
+            }
+        } catch (err: unknown) {
+            console.error("Login error:", err);
+
             setError("Unable to sign in. Please check your credentials and try again.");
         } finally {
             setLoading(false);
         }
     }
+
 
     return (
         <div className="w-full">
