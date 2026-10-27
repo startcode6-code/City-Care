@@ -38,15 +38,9 @@ export function clearTokens() {
 
 api.interceptors.request.use(
     (config) => {
-        console.log("========== API REQUEST DEBUG ==========");
-        console.log("Request URL:", config.url);
-        console.log("Request method:", config.method);
+
 
         const token = sessionStorage.getItem("accessToken");
-
-        // 1. Check token availability
-        console.log("Access token exists:", Boolean(token));
-        console.log("Access token length:", token?.length ?? 0);
 
         if (token) {
             config.headers.set("Authorization", `Bearer ${token}`);
