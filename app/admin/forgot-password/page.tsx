@@ -10,14 +10,16 @@ import {
     Mail,
     Send,
 } from "lucide-react";
+import { forgotPassword } from "@/lib/api/auth";
 
 export default function ForgotPasswordPage() {
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setError("");
         setSubmitted(false);
@@ -26,9 +28,22 @@ export default function ForgotPasswordPage() {
             setError("Please enter a valid email address.");
             return;
         }
+        setIsLoading(true);
 
-        // UI demo only. No email is sent at this stage.
-        setSubmitted(true);
+
+        try {
+            const result = await forgotPassword(email);
+            console.log(result)
+            if (result.success === true) {
+                setSubmitted(true);
+            } else {
+                setError(result.message || "Failed to send reset link.");
+            }
+        } catch (err) {
+            setError("An error occurred. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -75,11 +90,15 @@ export default function ForgotPasswordPage() {
                         className="mt-8 rounded-2xl border border-border bg-card p-5"
                     >
                         <CheckCircle2 className="mb-3 size-7 text-primary" />
-                        <h2 className="font-semibold">Form validated</h2>
+
+                        <h2 className="font-semibold">Password reset email sent successfully!</h2>
+
                         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                            Your email format is valid. Password reset emails
-                            will be enabled when the backend is connected.
+                            Please check your inbox for the password reset link. Open the link,
+                            create a new password, and use it to log in to your account.
+                            If you don't see the email, check your spam folder.
                         </p>
+
                         <button
                             type="button"
                             onClick={() => setSubmitted(false)}
@@ -126,14 +145,21 @@ export default function ForgotPasswordPage() {
                             </p>
                         )}
 
+
                         <button
                             type="submit"
-                            disabled={!isValidEmail}
+                            disabled={!isValidEmail || isLoading}
                             className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
                         >
-                            Send reset link
-                            <Send className="size-4" />
+                            {isLoading ? "Sending reset link..." : "Send reset link"}
+
+                            {isLoading ? (
+                                <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                            ) : (
+                                <Send className="size-4" />
+                            )}
                         </button>
+
                     </form>
                 )}
 

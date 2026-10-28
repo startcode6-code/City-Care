@@ -12,7 +12,6 @@ import {
     ShieldCheck,
     CheckCircle2,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +22,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { resetPassword } from "@/lib/api/auth";
 
 export default function ResetPasswordPage() {
     const searchParams = useSearchParams();
@@ -37,7 +37,7 @@ export default function ResetPasswordPage() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError("");
 
@@ -46,8 +46,8 @@ export default function ResetPasswordPage() {
             return;
         }
 
-        if (password.length < 8) {
-            setError("Password must be at least 8 characters long.");
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters long.");
             return;
         }
 
@@ -56,8 +56,19 @@ export default function ResetPasswordPage() {
             return;
         }
 
-        // Backend reset-password API will be connected here.
-        setSuccess(true);
+        try {
+            const result = await resetPassword(token, password);
+            console.log(result);
+            if (result.success === true) {
+                setSuccess(true);
+            } else {
+                setError(result.message || "Reset Password Failed");
+
+            }
+        } catch (e) {
+            setError("An error occurred. Please try again.");
+
+        }
     };
 
     return (

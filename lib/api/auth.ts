@@ -31,3 +31,13 @@ export async function getCurrentAdmin() {
     const response = await api.get("/api/auth/me");
     return response.data;
 }
+
+export async function forgotPassword(email: string) {
+    const response = await authApi.post("/api/auth/forgot-password", { email });
+    return response.data;
+}
+
+export async function resetPassword(token: string, newPassword: string) {
+    const response = await authApi.post("/api/auth/reset-password", { token, newPassword });
+    return response.data;
+}
