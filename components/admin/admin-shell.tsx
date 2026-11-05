@@ -37,11 +37,7 @@ const navigation = [
     { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
-export function AdminShell({
-    children,
-}: Readonly<{
-    children: ReactNode;
-}>) {
+export function AdminShell({ children, }: Readonly<{ children: ReactNode }>) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -62,7 +58,6 @@ export function AdminShell({
             document.removeEventListener("mousedown", handleOutsideClick);
         };
     }, []);
-
 
     const currentPage = navigation.find((item) => item.href === pathname)?.label ?? "Administration";
 
