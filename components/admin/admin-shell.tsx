@@ -130,11 +130,9 @@ export function AdminShell({ children, }: Readonly<{ children: ReactNode }>) {
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => {
-                                    console.log("Navigation clicked:", item.href);
                                     setMobileOpen(false);
                                 }}
-                                aria-current={active ? "page" : undefined}
-                                className={`group relative flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-medium transition-all duration-200 ${active
+                                className={`group relative flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-medium ${active
                                     ? "bg-primary/10 text-primary"
                                     : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                                     }`}
