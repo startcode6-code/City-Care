@@ -1,4 +1,4 @@
-"user client"
+"use client"
 import { ServiceForm } from "@/components/admin/admin-services-form";
 import { useState, useEffect, useMemo } from "react";
 

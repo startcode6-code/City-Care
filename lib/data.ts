@@ -150,16 +150,7 @@ export const departments: Department[] = [
 
 
 
-export type Doctor = {
-  slug: string;
-  name: string;
-  department: string;
-  role: string;
-  years: number;
-  days: string;
-  languages: string;
-  bio: string;
-};
+
 
 
 export type Facility = {

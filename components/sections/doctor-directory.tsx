@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DoctorCard } from "@/components/shared/doctor-card";
 import { EmptyState } from "@/components/shared/empty-state";
-import type { Doctor } from "@/lib/data";
+import { Doctor } from "@/lib/api/doctor";
 
 export function DoctorDirectory({ doctors, departments }: { doctors: Doctor[]; departments: string[] }) {
   const [active, setActive] = useState("All");
