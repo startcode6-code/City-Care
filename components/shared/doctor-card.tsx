@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Star, UserRound } from "lucide-react";
+import { ArrowRight, UserRound } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { Doctor } from "@/lib/data";
+import type { Doctor } from "@/lib/api/doctor";
 
 export function DoctorCard({ doctor }: { doctor: Doctor }) {
   return (
@@ -22,9 +22,9 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
         "
       >
         {/* Doctor Image */}
-        <div className="relative h-50 w-full overflow-hidden">
+        <div className="relative h-56 w-full overflow-hidden bg-muted">
           <Image
-            src='/images/dr_images.png'
+            src={doctor.photoUrl || "/images/dr_images.png"}
             alt={doctor.name}
             fill
             className="
@@ -50,17 +50,19 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
               to-transparent
             "
           />
-
-      
-
         </div>
 
         {/* Content */}
-        <div className="flex flex-1 flex-col px-5 pb-5 pt-9">
+        <div className="flex flex-1 flex-col px-5 pb-5 pt-6">
           {/* Doctor Name */}
           <h3 className="text-xl font-bold tracking-tight">
             {doctor.name}
           </h3>
+
+          {/* Department */}
+          <p className="mt-1 text-sm text-muted-foreground">
+            {doctor.department}
+          </p>
 
           {/* Role */}
           <p className="mt-1 text-sm font-semibold text-primary">
@@ -68,26 +70,12 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
           </p>
 
           {/* Experience */}
-          <div
-            className="
-              mt-5 flex items-center gap-2
-              text-sm text-muted-foreground
-            "
-          >
-            <span
-              className="
-                flex size-8 items-center justify-center
-                rounded-full
-                bg-primary/10
-                text-primary
-              "
-            >
+          <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
+            <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
               <UserRound className="size-4" aria-hidden />
             </span>
 
-            <span>
-              {doctor.years} years of experience
-            </span>
+            <span>{doctor.years} years of experience</span>
           </div>
 
           {/* Button */}
@@ -95,29 +83,20 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
             <Button
               variant="ghost"
               className="
-                h-11 w-full
-                rounded-full
-                bg-primary/10
-                text-sm font-semibold
-                text-primary
-                transition-all duration-300
+                h-11 w-full rounded-full
+                bg-primary/10 text-sm font-semibold
+                text-primary transition-all duration-300
                 hover:bg-primary
                 hover:text-primary-foreground
                 hover:shadow-md
               "
               nativeButton={false}
-              render={
-                <Link href={`/doctors/${doctor.slug}`} />
-              }
+              render={<Link href={`/doctors/${doctor.slug}`} />}
             >
               <span>View Profile</span>
 
               <ArrowRight
-                className="
-                  size-4
-                  transition-transform duration-300
-                  group-hover:translate-x-1
-                "
+                className="size-4 transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden
               />
             </Button>

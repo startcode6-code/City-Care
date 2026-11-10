@@ -1,5 +1,5 @@
 
-import { api } from "@/lib/api/client";
+import { api, publicApi } from "@/lib/api/client";
 import axios from "axios";
 
 export interface Doctor {
@@ -31,6 +31,18 @@ export interface Doctor {
     bio: string;
     photoUrl: string | null,
     photoPublicId: string | null
+}
+
+export interface DoctorResponse {
+    success: boolean;
+    message: string;
+    results: number;
+    data: Doctor[];
+}
+
+export async function getPublicDoctors(): Promise<DoctorResponse> {
+    const response = await publicApi.get("api/doctors/public");
+    return response.data;
 }
 
 export async function getDoctors() {
@@ -96,3 +108,4 @@ export async function updateDoctorPhoto(id: string, file: File) {
     );
     return response.data;
 }
+

@@ -80,6 +80,7 @@ export function AdminShell({ children, }: Readonly<{ children: ReactNode }>) {
             >
                 {/* Brand */}
                 <div className="flex h-[84px] items-center border-b border-border/70 px-5">
+
                     <Link
                         href="/admin/dashboard"
                         onClick={() => setMobileOpen(false)}
@@ -128,28 +129,18 @@ export function AdminShell({ children, }: Readonly<{ children: ReactNode }>) {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                onClick={() => setMobileOpen(false)}
+                                onClick={() => {
+                                    console.log("Navigation clicked:", item.href);
+                                    setMobileOpen(false);
+                                }}
                                 aria-current={active ? "page" : undefined}
                                 className={`group relative flex items-center gap-3 rounded-xl px-3 py-3 text-[13px] font-medium transition-all duration-200 ${active
                                     ? "bg-primary/10 text-primary"
                                     : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                                     }`}
                             >
-                                {active && (
-                                    <span className="absolute bottom-2.5 left-0 top-2.5 w-[3px] rounded-r-full bg-primary" />
-                                )}
-
-                                <Icon
-                                    className={`size-[18px] shrink-0 transition-transform duration-200 ${active ? "" : "group-hover:scale-105"
-                                        }`}
-                                    strokeWidth={active ? 2.2 : 1.8}
-                                />
-
+                                <Icon className="size-[18px] shrink-0" />
                                 <span className="flex-1">{item.label}</span>
-
-                                {active && (
-                                    <ChevronRight className="size-4 opacity-70" />
-                                )}
                             </Link>
                         );
                     })}

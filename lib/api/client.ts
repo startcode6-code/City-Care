@@ -22,6 +22,13 @@ export const authApi = axios.create({
     },
 });
 
+export const publicApi = axios.create({
+    baseURL: baseURL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
 export function saveTokens(accessToken: string, refreshToken: string) {
     sessionStorage.setItem("accessToken", accessToken);
     sessionStorage.setItem("refreshToken", refreshToken);

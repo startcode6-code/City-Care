@@ -29,7 +29,7 @@ export const departments: Department[] = [
     name: "General Surgery",
     summary:
       "Surgical treatment for common and emergency conditions with modern operative and post-operative care.",
-    images: "/images/general_surgery.png",  
+    images: "/images/general_surgery.png",
     services: [
       "Laparoscopic surgery",
       "Open surgical procedures",
@@ -47,7 +47,7 @@ export const departments: Department[] = [
     name: "Orthopedics",
     summary:
       "Comprehensive care for bones, joints, muscles and injuries, including trauma and orthopedic surgery.",
-    images: "/images/orthopedics.png",  
+    images: "/images/orthopedics.png",
     services: [
       "Fracture treatment",
       "Joint replacement",
@@ -65,7 +65,7 @@ export const departments: Department[] = [
     name: "Oral & Maxillofacial Surgery",
     summary:
       "Specialized surgical care for conditions affecting the mouth, jaw, face and related structures.",
-    images: "/images/Maxillofacial.png",  
+    images: "/images/Maxillofacial.png",
     services: [
       "Jaw surgery",
       "Facial trauma management",
@@ -82,7 +82,7 @@ export const departments: Department[] = [
     name: "Neurosurgery",
     summary:
       "Specialized surgical care for conditions affecting the brain, spine, nerves and nervous system.",
-    images: "/images/Neurosurgery.png",  
+    images: "/images/Neurosurgery.png",
     services: [
       "Brain surgery",
       "Spine surgery",
@@ -99,7 +99,7 @@ export const departments: Department[] = [
     name: "Plastic Surgery",
     summary:
       "Reconstructive and surgical care for injuries, wounds, burns and conditions requiring tissue restoration.",
-    images: "/images/plastice.png",  
+    images: "/images/plastice.png",
     services: [
       "Reconstructive surgery",
       "Burn injury management",
@@ -116,7 +116,7 @@ export const departments: Department[] = [
     name: "Urology",
     summary:
       "Diagnosis and treatment of conditions affecting the urinary system and male reproductive system.",
-    images: "/images/urology.png",  
+    images: "/images/urology.png",
     services: [
       "Kidney stone treatment",
       "Urinary tract care",
@@ -134,7 +134,7 @@ export const departments: Department[] = [
     name: "Polytrauma",
     summary:
       "Coordinated emergency care for patients with multiple serious injuries requiring rapid assessment and treatment.",
-    images: "/images/polytrauma.png",  
+    images: "/images/polytrauma.png",
     services: [
       "Multiple injury management",
       "Road traffic accident care",
@@ -148,6 +148,8 @@ export const departments: Department[] = [
   },
 ];
 
+
+
 export type Doctor = {
   slug: string;
   name: string;
@@ -159,88 +161,6 @@ export type Doctor = {
   bio: string;
 };
 
-export const doctors: Doctor[] = [
-  {
-    slug: "sarah-chen",
-    name: "Dr. Sarah Chen",
-    department: "Cardiology",
-    role: "Consultant Cardiologist",
-    years: 14,
-    days: "Mon, Wed, Fri",
-    languages: "English, Mandarin",
-    bio: "Dr. Chen focuses on preventive cardiology and heart failure care. She sees patients for blood pressure, cholesterol and chest pain assessments.",
-  },
-  {
-    slug: "michael-okafor",
-    name: "Dr. Michael Okafor",
-    department: "Orthopedics",
-    role: "Orthopedic Surgeon",
-    years: 18,
-    days: "Tue, Thu, Sat",
-    languages: "English, Igbo",
-    bio: "Dr. Okafor performs knee and hip replacements and treats sports injuries. He works closely with our physiotherapy team on recovery plans.",
-  },
-  {
-    slug: "priya-nair",
-    name: "Dr. Priya Nair",
-    department: "Pediatrics",
-    role: "Senior Pediatrician",
-    years: 12,
-    days: "Mon to Fri",
-    languages: "English, Hindi, Malayalam",
-    bio: "Dr. Nair looks after children from birth to 16. She runs our vaccination clinic and the weekly growth and nutrition check.",
-  },
-  {
-    slug: "james-carter",
-    name: "Dr. James Carter",
-    department: "Neurology",
-    role: "Consultant Neurologist",
-    years: 16,
-    days: "Tue, Thu",
-    languages: "English",
-    bio: "Dr. Carter treats migraine, epilepsy and movement disorders, and leads our stroke recovery programme.",
-  },
-  {
-    slug: "elena-rossi",
-    name: "Dr. Elena Rossi",
-    department: "General Surgery",
-    role: "Laparoscopic Surgeon",
-    years: 15,
-    days: "Mon, Wed, Sat",
-    languages: "English, Italian",
-    bio: "Dr. Rossi specialises in keyhole surgery for gallbladder, hernia and appendix problems, with most patients going home the same or next day.",
-  },
-  {
-    slug: "amir-hassan",
-    name: "Dr. Amir Hassan",
-    department: "Dermatology",
-    role: "Consultant Dermatologist",
-    years: 10,
-    days: "Mon, Tue, Thu",
-    languages: "English, Arabic",
-    bio: "Dr. Hassan treats acne, eczema, hair loss and skin allergies, and performs minor skin procedures in the day-care unit.",
-  },
-  {
-    slug: "grace-liu",
-    name: "Dr. Grace Liu",
-    department: "Pediatrics",
-    role: "Neonatologist",
-    years: 9,
-    days: "Wed to Sun",
-    languages: "English, Cantonese",
-    bio: "Dr. Liu cares for premature and newborn babies in our neonatal unit and guides parents through the first months at home.",
-  },
-  {
-    slug: "david-mensah",
-    name: "Dr. David Mensah",
-    department: "Cardiology",
-    role: "Interventional Cardiologist",
-    years: 20,
-    days: "Tue, Fri",
-    languages: "English, Twi",
-    bio: "Dr. Mensah performs angiograms and angioplasty, and is on call for cardiac emergencies.",
-  },
-];
 
 export type Facility = {
   slug: string;
