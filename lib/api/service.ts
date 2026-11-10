@@ -37,7 +37,7 @@ export async function getServices(forceRefresh = false): Promise<Service[]> {
         return servicesPromise;
     }
 
-    servicesPromise = api.get<ServiceResponse>("/api/services/get")
+    servicesPromise = api.get<ServiceResponse>("/api/service/get")
         .then((response) => {
             if (!response.data.success) {
                 throw new Error(response.data.message || "Failed to fetch services.");
