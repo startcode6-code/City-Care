@@ -33,7 +33,7 @@ const navigation = [
     { label: "Services", href: "/admin/services", icon: Hospital },
     { label: "Appointments", href: "/admin/appointments", icon: CalendarDays },
     { label: "Blog", href: "/admin/blog", icon: FileText },
-    { label: "Videos", href: "/admin/videos", icon: Video },
+    { label: "Youtube Videos", href: "/admin/youtube-video", icon: Video },
     { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 

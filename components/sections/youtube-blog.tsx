@@ -1,30 +1,18 @@
+
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Play } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ArrowUpRight, Play, RefreshCw } from "lucide-react";
+
 import { Section, SectionHeading } from "@/components/shared/section";
+import {
+  getPublicYoutubeVideos,
+  type YoutubeVideo,
+} from "@/lib/api/youtube-video";
 
-const videos = [
-  {
-    title: "5 Important Health Checkups You Should Never Ignore",
-    category: "Preventive Care",
-    duration: "08:24",
-    videoUrl: "https://www.youtube.com/watch?v=9zDNctfxD-0",
-  },
-  {
-    title: "Early Signs of Heart Problems You Should Know",
-    category: "Heart Health",
-    duration: "06:15",
-    videoUrl: "https://www.youtube.com/watch?v=Ki6mHHqpkLg",
-  },
-  {
-    title: "Simple Daily Habits for a Healthier Life",
-    category: "Healthy Lifestyle",
-    duration: "05:42",
-    videoUrl: "https://www.youtube.com/watch?v=Hig2maqDiCI",
-  },
-];
-
-function getYouTubeVideoId(url: string) {
+function getYouTubeVideoId(url: string): string | null {
   try {
     const parsedUrl = new URL(url);
     const hostname = parsedUrl.hostname.replace(/^www\./, "");
@@ -54,7 +42,7 @@ function getYouTubeVideoId(url: string) {
   }
 }
 
-function getYouTubeThumbnail(url: string) {
+function getYouTubeThumbnail(url: string): string {
   const videoId = getYouTubeVideoId(url);
 
   return videoId
@@ -63,6 +51,65 @@ function getYouTubeThumbnail(url: string) {
 }
 
 export function YoutubeBlog() {
+  const [videos, setVideos] = useState<YoutubeVideo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadVideos = useCallback(async (forceRefresh = false) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getPublicYoutubeVideos(forceRefresh);
+      setVideos(data);
+    } catch (error: unknown) {
+      console.error("Public YouTube videos error:", error);
+
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Unable to load videos. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function fetchVideos() {
+      try {
+        const data = await getPublicYoutubeVideos();
+
+        if (active) {
+          setVideos(data);
+          setError(null);
+        }
+      } catch (error: unknown) {
+        console.error("Public YouTube videos error:", error);
+
+        if (active) {
+          setError(
+            error instanceof Error
+              ? error.message
+              : "Unable to load videos."
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void fetchVideos();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <Section>
       <SectionHeading
@@ -72,71 +119,113 @@ export function YoutubeBlog() {
         hrefLabel="Visit our YouTube"
       />
 
-      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {videos.map((video) => {
-          const videoId = getYouTubeVideoId(video.videoUrl);
-          const thumbnail = getYouTubeThumbnail(video.videoUrl);
-
-          return (
-            <li
-              key={video.videoUrl + video.title}
-              className="group min-w-0"
+      {loading && (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="overflow-hidden rounded-2xl border border-border bg-card"
             >
-              <article className="h-full overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <Link
-                  href={video.videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Watch ${video.title} on YouTube`}
-                  className="block"
-                >
-                  <div className="relative aspect-video overflow-hidden bg-muted">
-                    <Image
-                      src={thumbnail}
-                      alt={video.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+              <div className="aspect-video animate-pulse bg-muted" />
+              <div className="space-y-3 p-5">
+                <div className="h-5 w-28 animate-pulse rounded bg-muted" />
+                <div className="h-6 w-full animate-pulse rounded bg-muted" />
+                <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/35">
-                      <span className="flex size-14 items-center justify-center rounded-full bg-white/95 text-red-600 shadow-lg transition-transform group-hover:scale-110">
+      {!loading && error && (
+        <div className="rounded-2xl border border-destructive/20 bg-card px-6 py-12 text-center">
+          <p className="font-semibold text-foreground">
+            Unable to load videos
+          </p>
 
-                        <Play className="ml-1 size-7 fill-current" />
+          <p className="mt-2 text-sm text-muted-foreground">
+            {error}
+          </p>
 
-                      </span>
-                    </div>
+          <button
+            type="button"
+            onClick={() => void loadVideos(true)}
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <RefreshCw className="size-4" />
+            Try again
+          </button>
+        </div>
+      )}
 
-                    <span className="absolute bottom-3 right-3 rounded-md bg-black/80 px-2 py-1 text-xs font-medium text-white">
-                      {video.duration}
-                    </span>
-                  </div>
-                </Link>
+      {!loading && !error && videos.length === 0 && (
+        <div className="rounded-2xl border border-border bg-card px-6 py-12 text-center">
+          <p className="font-semibold text-foreground">
+            No videos available
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Health videos will appear here when they are published.
+          </p>
+        </div>
+      )}
 
-                <div className="p-5">
-                  <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                    {video.category}
-                  </span>
+      {!loading && !error && videos.length > 0 && (
+        <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {videos.map((video) => {
+            const thumbnail = getYouTubeThumbnail(video.videoUrl);
 
-                  <h3 className="mt-3 line-clamp-2 min-h-14 text-lg font-bold leading-7 tracking-tight text-foreground">
-                    {video.title}
-                  </h3>
-
+            return (
+              <li key={video.id} className="group min-w-0">
+                <article className="h-full overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                   <Link
                     href={video.videoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:opacity-80"
+                    aria-label={`Watch ${video.title} on YouTube`}
+                    className="block"
                   >
-                    Watch video
-                    <ArrowUpRight className="size-4" />
+                    <div className="relative aspect-video overflow-hidden bg-muted">
+                      <Image
+                        src={thumbnail}
+                        alt={video.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/35">
+                        <span className="flex size-14 items-center justify-center rounded-full bg-white/95 text-red-600 shadow-lg transition-transform group-hover:scale-110">
+                          <Play className="ml-1 size-7 fill-current" />
+                        </span>
+                      </div>
+                    </div>
                   </Link>
-                </div>
-              </article>
-            </li>
-          );
-        })}
-      </ul>
+
+                  <div className="p-5">
+                    <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                      {video.category}
+                    </span>
+
+                    <h3 className="mt-3 line-clamp-2 min-h-14 text-lg font-bold leading-7 tracking-tight text-foreground">
+                      {video.title}
+                    </h3>
+
+                    <Link
+                      href={video.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:opacity-80"
+                    >
+                      Watch video
+                      <ArrowUpRight className="size-4" />
+                    </Link>
+                  </div>
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </Section>
   );
 }
