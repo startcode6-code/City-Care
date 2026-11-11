@@ -89,7 +89,7 @@ export default function ServicesPage() {
     const handleSaveService = async (data: ServiceFormData) => {
         try {
             let photoUrl = selectedService?.photoUrl ?? "";
-            let photoPublicId = selectedService?.photoPubliceId ?? "";
+            let photoPublicId = selectedService?.photoPublicId ?? "";
 
             // If a new photo is selected
             if (data.photo) {

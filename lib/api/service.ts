@@ -8,7 +8,7 @@ export interface Service {
     serviceName: string;
     summary: string;
     photoUrl: string | null;
-    photoPubliceId: string | null;
+    photoPublicId: string | null;
     service: string[];
 }
 
@@ -148,4 +148,25 @@ export async function updateServicePhoto(id: string, file: File) {
         }
     );
     return response.data;
+}
+
+
+export async function getPublicServices(): Promise<Service[]> {
+    const response = await publicApi.get<ServiceResponse>("/api/service/public");
+
+    if (response.data?.success === false) {
+        throw new Error(response.data.message || "Failed to fetch public services.");
+    }
+
+    const rawData = response.data?.data;
+
+    if (Array.isArray(rawData)) {
+        return rawData;
+    }
+
+    if (rawData && typeof rawData === "object" && "services" in rawData && Array.isArray(rawData.services)) {
+        return rawData.services;
+    }
+
+    return [];
 }
