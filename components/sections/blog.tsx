@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Section, SectionHeading } from "@/components/shared/section";
 import { blogPosts } from "@/lib/data";
@@ -50,7 +49,7 @@ export function Blog() {
 
   return (
     <Section tone="background"
-     className="bg-muted"
+      className="bg-muted"
     >
       {/* Heading + Navigation */}
       <div className="flex items-center justify-between">
@@ -144,11 +143,10 @@ export function Blog() {
               key={index}
               type="button"
               onClick={() => setCurrentPage(index)}
-              className={`h-2 rounded-full transition-all ${
-                currentPage === index
+              className={`h-2 rounded-full transition-all ${currentPage === index
                   ? "w-6 bg-primary"
                   : "w-2 bg-muted-foreground/30"
-              }`}
+                }`}
               aria-label={`Go to blog page ${index + 1}`}
             />
           ))}
