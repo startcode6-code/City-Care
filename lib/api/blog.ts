@@ -201,7 +201,7 @@ export async function updateBlogPhoto(id: string, file: File) {
 
 // PUBLIC: GET BLOGS
 export async function getPublicBlogs(): Promise<Blog[]> {
-    const response = await publicApi.get<BlogResponse>("/api/blog/public");
+    const response = await publicApi.get<BlogResponse>("/api/blog/get-blog/public");
 
     if (!response.data?.success) {
         throw new Error(

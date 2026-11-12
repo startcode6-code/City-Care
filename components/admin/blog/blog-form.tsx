@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Image from "next/image";
 import {
     X,
@@ -12,7 +12,6 @@ import {
     Search,
     Loader2,
     Plus,
-    Tag,
     Settings2,
 } from "lucide-react";
 
@@ -32,7 +31,10 @@ interface BlogFormSheetProps {
 }
 
 const inputClass =
-    "w-full h-11 rounded-xl border border-gray-200 bg-white px-3.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
+    "h-11 w-full rounded-xl border border-input bg-background px-3.5 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15";
+
+const textareaClass =
+    "w-full rounded-xl border border-input bg-background px-3.5 py-3 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15";
 
 const initialForm = {
     title: "",
@@ -68,13 +70,15 @@ function Field({
 }: {
     label: string;
     required?: boolean;
-    children: React.ReactNode;
+    children: ReactNode;
 }) {
     return (
         <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-800">
+            <label className="text-sm font-medium text-foreground">
                 {label}
-                {required && <span className="ml-1 text-red-500">*</span>}
+                {required && (
+                    <span className="ml-1 text-destructive">*</span>
+                )}
             </label>
             {children}
         </div>
@@ -122,13 +126,17 @@ export function BlogFormSheet({
 
             setPreview(blog.imageUrl || "");
         } else {
-            setForm(initialForm);
+            setForm({ ...initialForm });
             setPreview("");
         }
 
         setImageFile(null);
         setError("");
         setSlugManuallyChanged(false);
+
+        if (fileRef.current) {
+            fileRef.current.value = "";
+        }
     }, [open, blog]);
 
     useEffect(() => {
@@ -144,7 +152,10 @@ export function BlogFormSheet({
         key: K,
         value: (typeof initialForm)[K]
     ) {
-        setForm((previous) => ({ ...previous, [key]: value }));
+        setForm((previous) => ({
+            ...previous,
+            [key]: value,
+        }));
     }
 
     function handleTitleChange(value: string) {
@@ -173,12 +184,18 @@ export function BlogFormSheet({
         setImageFile(file);
     }
 
+
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setError("");
 
         if (!form.title.trim()) {
             setError("Please enter blog title.");
+            return;
+        }
+
+        if (!form.slug.trim()) {
+            setError("Please enter blog URL slug.");
             return;
         }
 
@@ -214,21 +231,14 @@ export function BlogFormSheet({
             let imagePublicId = form.imagePublicId || null;
 
             if (imageFile) {
-                const uploadResult: any = await uploadBlogPhoto(imageFile);
-                const uploaded = uploadResult?.data ?? uploadResult;
+                const uploaded = await uploadBlogPhoto(imageFile);
 
                 imageUrl =
-                    uploaded?.imageUrl ??
-                    uploaded?.photoUrl ??
-                    uploaded?.url ??
-                    uploaded?.secure_url ??
+                    uploaded.imageUrl ??
                     null;
 
                 imagePublicId =
-                    uploaded?.imagePublicId ??
-                    uploaded?.photoPublicId ??
-                    uploaded?.publicId ??
-                    uploaded?.public_id ??
+                    uploaded.imagePublicId ??
                     null;
 
                 if (!imageUrl) {
@@ -238,7 +248,7 @@ export function BlogFormSheet({
 
             const payload: CreateBlogPayload = {
                 title: form.title.trim(),
-                slug: form.slug || slugify(form.title),
+                slug: form.slug.trim(),
                 category: form.category.trim(),
                 author: form.author.trim(),
                 readTime: form.readTime.trim(),
@@ -247,7 +257,10 @@ export function BlogFormSheet({
                 imageAlt: form.imageAlt.trim(),
                 summary: form.summary.trim(),
                 content: form.content.trim(),
-                tags: form.tags.split(",").map((tag) => tag.trim()).filter(Boolean),
+                tags: form.tags
+                    .split(",")
+                    .map((tag) => tag.trim())
+                    .filter(Boolean),
                 metaTitle: form.metaTitle.trim(),
                 metaDescription: form.metaDescription.trim(),
                 metaKeywords: form.metaKeywords
@@ -266,16 +279,34 @@ export function BlogFormSheet({
 
             onOpenChange(false);
             onSuccess?.();
-        } catch (err: any) {
+
+        } catch (err: unknown) {
+            console.error("Blog submission error:", err);
+
+            const message =
+                typeof err === "object" && err !== null && "response" in err
+                    ? (
+                        err as {
+                            response?: {
+                                data?: {
+                                    message?: string;
+                                };
+                            };
+                        }
+                    ).response?.data?.message
+                    : undefined;
+
             setError(
-                err?.response?.data?.message ||
-                err?.message ||
+                message ||
+                (err instanceof Error ? err.message : "") ||
                 "Unable to save blog. Please try again."
             );
+
         } finally {
             setSaving(false);
         }
     }
+
 
     if (!open) return null;
 
@@ -285,24 +316,25 @@ export function BlogFormSheet({
             <button
                 type="button"
                 aria-label="Close blog form"
-                onClick={() => onOpenChange(false)}
+                onClick={() => !saving && onOpenChange(false)}
                 className="absolute inset-0 bg-black/40 backdrop-blur-[3px]"
             />
 
             {/* Drawer */}
-            <div className="absolute inset-y-0 right-0 flex w-full flex-col bg-white shadow-2xl sm:max-w-[720px]">
+            <div className="absolute inset-y-0 right-0 flex w-full flex-col border-l border-border bg-background shadow-2xl sm:max-w-[720px]">
+
                 {/* Header */}
-                <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-5 sm:px-7">
+                <div className="flex shrink-0 items-center justify-between border-b border-border px-6 py-5 sm:px-7">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                        <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                             <FileText size={22} />
                         </div>
 
                         <div>
-                            <h2 className="text-xl font-semibold text-gray-900">
+                            <h2 className="text-xl font-semibold text-foreground">
                                 {isEdit ? "Update Blog" : "Add New Blog"}
                             </h2>
-                            <p className="mt-1 text-sm text-gray-500">
+                            <p className="mt-1 text-sm text-muted-foreground">
                                 Enter the blog post information.
                             </p>
                         </div>
@@ -310,8 +342,10 @@ export function BlogFormSheet({
 
                     <button
                         type="button"
+                        disabled={saving}
                         onClick={() => onOpenChange(false)}
-                        className="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
+                        aria-label="Close"
+                        className="rounded-lg p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground disabled:opacity-50"
                     >
                         <X size={21} />
                     </button>
@@ -323,28 +357,31 @@ export function BlogFormSheet({
                 >
                     <div className="flex-1 space-y-7 overflow-y-auto px-6 py-6 sm:px-7">
 
-                        {/* Basic information */}
+                        {/* Basic Information */}
                         <section className="space-y-5">
                             <div className="flex items-center gap-2">
-                                <BookOpen size={18} className="text-blue-600" />
-                                <h3 className="font-semibold text-gray-900">
+                                <BookOpen size={18} className="text-primary" />
+                                <h3 className="font-semibold text-foreground">
                                     Basic Information
                                 </h3>
                             </div>
 
                             <Field label="Blog Cover Image" required={!isEdit}>
                                 <div className="flex flex-wrap items-center gap-5">
-                                    <div className="relative flex h-32 w-40 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+                                    <div className="relative flex h-32 w-40 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
                                         {preview ? (
                                             <Image
                                                 src={preview}
-                                                alt="Blog cover preview"
+                                                alt={form.imageAlt || "Blog cover preview"}
                                                 fill
                                                 unoptimized
                                                 className="object-cover"
                                             />
                                         ) : (
-                                            <ImagePlus size={35} className="text-gray-400" />
+                                            <ImagePlus
+                                                size={35}
+                                                className="text-muted-foreground"
+                                            />
                                         )}
                                     </div>
 
@@ -354,19 +391,21 @@ export function BlogFormSheet({
                                             type="file"
                                             accept="image/png,image/jpeg,image/webp"
                                             className="hidden"
-                                            onChange={(e) => handleImage(e.target.files?.[0])}
+                                            onChange={(e) =>
+                                                handleImage(e.target.files?.[0])
+                                            }
                                         />
 
                                         <button
                                             type="button"
                                             onClick={() => fileRef.current?.click()}
-                                            className="flex h-11 items-center gap-2 rounded-xl border border-gray-200 px-4 text-sm font-medium hover:bg-gray-50"
+                                            className="flex h-11 items-center gap-2 rounded-xl border border-border bg-background px-4 text-sm font-medium text-foreground transition hover:bg-muted"
                                         >
                                             <Upload size={17} />
                                             {preview ? "Change Image" : "Upload Image"}
                                         </button>
 
-                                        <p className="text-xs text-gray-500">
+                                        <p className="text-xs text-muted-foreground">
                                             JPG, PNG or WebP. Maximum 5 MB.
                                         </p>
 
@@ -378,9 +417,12 @@ export function BlogFormSheet({
                                                     setPreview("");
                                                     updateField("imageUrl", "");
                                                     updateField("imagePublicId", "");
-                                                    if (fileRef.current) fileRef.current.value = "";
+
+                                                    if (fileRef.current) {
+                                                        fileRef.current.value = "";
+                                                    }
                                                 }}
-                                                className="text-xs font-medium text-red-500"
+                                                className="text-xs font-medium text-destructive hover:underline"
                                             >
                                                 Remove image
                                             </button>
@@ -394,7 +436,9 @@ export function BlogFormSheet({
                                     className={inputClass}
                                     placeholder="Enter blog title"
                                     value={form.title}
-                                    onChange={(e) => handleTitleChange(e.target.value)}
+                                    onChange={(e) =>
+                                        handleTitleChange(e.target.value)
+                                    }
                                 />
                             </Field>
 
@@ -408,7 +452,7 @@ export function BlogFormSheet({
                                         updateField("slug", slugify(e.target.value));
                                     }}
                                 />
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     Generated automatically from blog title.
                                 </p>
                             </Field>
@@ -419,7 +463,9 @@ export function BlogFormSheet({
                                         className={inputClass}
                                         placeholder="e.g. Healthcare"
                                         value={form.category}
-                                        onChange={(e) => updateField("category", e.target.value)}
+                                        onChange={(e) =>
+                                            updateField("category", e.target.value)
+                                        }
                                     />
                                 </Field>
 
@@ -428,7 +474,9 @@ export function BlogFormSheet({
                                         className={inputClass}
                                         placeholder="Author name"
                                         value={form.author}
-                                        onChange={(e) => updateField("author", e.target.value)}
+                                        onChange={(e) =>
+                                            updateField("author", e.target.value)
+                                        }
                                     />
                                 </Field>
                             </div>
@@ -439,7 +487,9 @@ export function BlogFormSheet({
                                         className={inputClass}
                                         placeholder="5 min read"
                                         value={form.readTime}
-                                        onChange={(e) => updateField("readTime", e.target.value)}
+                                        onChange={(e) =>
+                                            updateField("readTime", e.target.value)
+                                        }
                                     />
                                 </Field>
 
@@ -448,7 +498,9 @@ export function BlogFormSheet({
                                         className={inputClass}
                                         placeholder="Describe the cover image"
                                         value={form.imageAlt}
-                                        onChange={(e) => updateField("imageAlt", e.target.value)}
+                                        onChange={(e) =>
+                                            updateField("imageAlt", e.target.value)
+                                        }
                                     />
                                 </Field>
                             </div>
@@ -456,20 +508,24 @@ export function BlogFormSheet({
                             <Field label="Short Summary" required>
                                 <textarea
                                     rows={3}
-                                    className="w-full rounded-xl border border-gray-200 px-3.5 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                    className={textareaClass}
                                     placeholder="Write a short description of this blog..."
                                     value={form.summary}
-                                    onChange={(e) => updateField("summary", e.target.value)}
+                                    onChange={(e) =>
+                                        updateField("summary", e.target.value)
+                                    }
                                 />
                             </Field>
 
                             <Field label="Full Blog Content" required>
                                 <textarea
                                     rows={9}
-                                    className="w-full rounded-xl border border-gray-200 px-3.5 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                    className={textareaClass}
                                     placeholder="Write your complete blog content here..."
                                     value={form.content}
-                                    onChange={(e) => updateField("content", e.target.value)}
+                                    onChange={(e) =>
+                                        updateField("content", e.target.value)
+                                    }
                                 />
                             </Field>
 
@@ -478,21 +534,23 @@ export function BlogFormSheet({
                                     className={inputClass}
                                     placeholder="Healthcare, Health Tips, Prevention"
                                     value={form.tags}
-                                    onChange={(e) => updateField("tags", e.target.value)}
+                                    onChange={(e) =>
+                                        updateField("tags", e.target.value)
+                                    }
                                 />
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                     Separate multiple tags using commas.
                                 </p>
                             </Field>
                         </section>
 
-                        <div className="border-t border-gray-100" />
+                        <div className="border-t border-border" />
 
-                        {/* SEO */}
+                        {/* SEO Information */}
                         <section className="space-y-5">
                             <div className="flex items-center gap-2">
-                                <Search size={18} className="text-blue-600" />
-                                <h3 className="font-semibold text-gray-900">
+                                <Search size={18} className="text-primary" />
+                                <h3 className="font-semibold text-foreground">
                                     SEO Information
                                 </h3>
                             </div>
@@ -502,14 +560,16 @@ export function BlogFormSheet({
                                     className={inputClass}
                                     placeholder="SEO title"
                                     value={form.metaTitle}
-                                    onChange={(e) => updateField("metaTitle", e.target.value)}
+                                    onChange={(e) =>
+                                        updateField("metaTitle", e.target.value)
+                                    }
                                 />
                             </Field>
 
                             <Field label="Meta Description">
                                 <textarea
                                     rows={3}
-                                    className="w-full rounded-xl border border-gray-200 px-3.5 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                    className={textareaClass}
                                     placeholder="SEO description"
                                     value={form.metaDescription}
                                     onChange={(e) =>
@@ -530,13 +590,13 @@ export function BlogFormSheet({
                             </Field>
                         </section>
 
-                        <div className="border-t border-gray-100" />
+                        <div className="border-t border-border" />
 
-                        {/* Publishing */}
+                        {/* Publishing Settings */}
                         <section className="space-y-5">
                             <div className="flex items-center gap-2">
-                                <Settings2 size={18} className="text-blue-600" />
-                                <h3 className="font-semibold text-gray-900">
+                                <Settings2 size={18} className="text-primary" />
+                                <h3 className="font-semibold text-foreground">
                                     Publishing Settings
                                 </h3>
                             </div>
@@ -558,12 +618,12 @@ export function BlogFormSheet({
                                 </select>
                             </Field>
 
-                            <label className="flex cursor-pointer items-center justify-between rounded-xl border border-gray-200 p-4">
+                            <label className="flex cursor-pointer items-center justify-between rounded-xl border border-border bg-card p-4">
                                 <div>
-                                    <p className="text-sm font-semibold text-gray-900">
+                                    <p className="text-sm font-semibold text-card-foreground">
                                         Featured Blog
                                     </p>
-                                    <p className="mt-1 text-xs text-gray-500">
+                                    <p className="mt-1 text-xs text-muted-foreground">
                                         Highlight this blog on the website.
                                     </p>
                                 </div>
@@ -574,25 +634,28 @@ export function BlogFormSheet({
                                     onChange={(e) =>
                                         updateField("isFeatured", e.target.checked)
                                     }
-                                    className="h-5 w-5 accent-blue-600"
+                                    className="size-5 accent-primary"
                                 />
                             </label>
                         </section>
 
                         {error && (
-                            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                            <div
+                                role="alert"
+                                className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+                            >
                                 {error}
                             </div>
                         )}
                     </div>
 
                     {/* Footer */}
-                    <div className="flex shrink-0 items-center justify-end gap-3 border-t border-gray-200 bg-white px-6 py-4 sm:px-7">
+                    <div className="flex shrink-0 items-center justify-end gap-3 border-t border-border bg-background px-6 py-4 sm:px-7">
                         <button
                             type="button"
                             disabled={saving}
                             onClick={() => onOpenChange(false)}
-                            className="h-11 rounded-xl border border-gray-200 px-5 text-sm font-medium hover:bg-gray-50"
+                            className="h-11 rounded-xl border border-border bg-background px-5 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-50"
                         >
                             Cancel
                         </button>
@@ -600,7 +663,7 @@ export function BlogFormSheet({
                         <button
                             type="submit"
                             disabled={saving}
-                            className="flex h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
+                            className="flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             {saving ? (
                                 <>
