@@ -1,5 +1,5 @@
-
 "use client";
+
 
 import { useState, type FormEvent } from "react";
 import type { Doctor } from "@/lib/api/doctor";
@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
+
+import { createAppointment } from "@/lib/api/appointments";
 
 import {
   appointmentSlots,
@@ -46,6 +48,18 @@ type AppointmentFormProps = {
   doctors: Doctor[];
 };
 
+// Shape of an axios error response coming from the backend
+type ApiError = {
+  response?: {
+    status?: number;
+    data?: {
+      error?: string;
+      message?: string;
+      fieldErrors?: AppointmentFieldErrors;
+    };
+  };
+};
+
 export function AppointmentForm({
   minDate,
   defaultDepartment = "",
@@ -54,20 +68,14 @@ export function AppointmentForm({
   packageName,
   doctors,
 }: AppointmentFormProps) {
-  const [status, setStatus] = useState<Status>({
-    state: "idle",
-  });
-
+  const [status, setStatus] = useState<Status>({ state: "idle" });
   const [errors, setErrors] = useState<AppointmentFieldErrors>({});
   const [department, setDepartment] = useState(defaultDepartment);
   const [selectedDoctor, setSelectedDoctor] = useState(defaultDoctor);
 
   // Filter doctors according to selected department
   const visibleDoctors = department
-    ? doctors.filter(
-      (d) =>
-        departmentSlugFromName(d.department) === department
-    )
+    ? doctors.filter((d) => departmentSlugFromName(d.department) === department)
     : doctors;
 
   function fieldProps(name: keyof AppointmentInput) {
@@ -75,9 +83,7 @@ export function AppointmentForm({
       id: name,
       name,
       "aria-invalid": errors[name] ? true : undefined,
-      "aria-describedby": errors[name]
-        ? `${name}-error`
-        : undefined,
+      "aria-describedby": errors[name] ? `${name}-error` : undefined,
     } as const;
   }
 
@@ -85,14 +91,9 @@ export function AppointmentForm({
   function onDepartmentChange(value: string) {
     setDepartment(value);
 
-    const selected = doctors.find(
-      (d) => d.slug === selectedDoctor
-    );
+    const selected = doctors.find((d) => d.slug === selectedDoctor);
 
-    if (
-      selected &&
-      departmentSlugFromName(selected.department) !== value
-    ) {
+    if (selected && departmentSlugFromName(selected.department) !== value) {
       setSelectedDoctor("");
     }
   }
@@ -116,10 +117,7 @@ export function AppointmentForm({
           "time",
           "reason",
         ] as const
-      ).map((k) => [
-        k,
-        String(form.get(k) ?? ""),
-      ])
+      ).map((k) => [k, String(form.get(k) ?? "")])
     );
 
     const parsed = appointmentSchema.safeParse(values);
@@ -135,9 +133,7 @@ export function AppointmentForm({
       parsed.data.doctor &&
       !doctors.some((d) => d.slug === parsed.data.doctor)
     ) {
-      setErrors({
-        doctor: "Please select a valid doctor.",
-      });
+      setErrors({ doctor: "Please Select A Valid Doctor." });
       setStatus({ state: "idle" });
       return;
     }
@@ -146,49 +142,38 @@ export function AppointmentForm({
     setStatus({ state: "submitting" });
 
     try {
-      const response = await fetch("/api/appointments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(parsed.data),
-      });
-
-      const body = await response.json().catch(() => ({}));
-
-      if (response.status === 422 && body.fieldErrors) {
-        setErrors(body.fieldErrors);
-        setStatus({
-          state: "error",
-          message:
-            body.error ??
-            "Please correct the highlighted fields.",
-        });
-        return;
-      }
-
-      if (!response.ok) {
-        setStatus({
-          state: "error",
-          message:
-            body.error ??
-            "Something went wrong. Please try again.",
-        });
-        return;
-      }
+      const created = await createAppointment(parsed.data);
 
       setStatus({
         state: "success",
-        reference: body.reference,
+        reference: created.reference,
         name: parsed.data.name,
         date: parsed.data.date,
         time: parsed.data.time,
       });
-    } catch {
+    } catch (err: unknown) {
+      const res = (err as ApiError).response;
+
+      // No response means network or server is unreachable
+      if (!res) {
+        setStatus({
+          state: "error",
+          message:
+            "We Could Not Reach The Server. Check Your Connection And Try Again.",
+        });
+        return;
+      }
+
+      if (res.status === 422 && res.data?.fieldErrors) {
+        setErrors(res.data.fieldErrors);
+      }
+
       setStatus({
         state: "error",
         message:
-          "We could not reach the server. Check your connection and try again.",
+          res.data?.error ??
+          res.data?.message ??
+          "Something Went Wrong. Please Try Again.",
       });
     }
   }
@@ -198,24 +183,17 @@ export function AppointmentForm({
     return (
       <Card>
         <CardContent role="status" className="p-8 text-center">
-          <CircleCheck
-            className="mx-auto size-12 text-primary"
-            aria-hidden
-          />
+          <CircleCheck className="mx-auto size-12 text-primary" aria-hidden />
 
-          <h2 className="mt-4 text-xl font-bold">
-            Request received
-          </h2>
+          <h2 className="mt-4 text-xl font-bold">Request Received</h2>
 
           <p className="mx-auto mt-2 max-w-sm text-muted-foreground">
-            Thank you, {status.name}. We have noted{" "}
-            {status.date} at {status.time} and will confirm by
-            phone or email.
+            Thank You, {status.name}. We Have Noted {status.date} At{" "}
+            {status.time} And Will Confirm By Phone Or Email.
           </p>
 
           <p className="mt-4 text-sm">
-            Your reference number is{" "}
-            <strong>{status.reference}</strong>
+            Your Reference Number Is <strong>{status.reference}</strong>
           </p>
 
           <Button
@@ -224,7 +202,7 @@ export function AppointmentForm({
             className="mt-4"
             onClick={() => setStatus({ state: "idle" })}
           >
-            Book another appointment
+            Book Another Appointment
           </Button>
         </CardContent>
       </Card>
@@ -236,55 +214,31 @@ export function AppointmentForm({
   return (
     <Card>
       <CardContent className="p-6 sm:p-8">
-        <form
-          onSubmit={onSubmit}
-          noValidate
-          aria-busy={submitting}
-        >
+        <form onSubmit={onSubmit} noValidate aria-busy={submitting}>
           {packageName && (
             <p className="mb-5 rounded-md bg-accent px-4 py-3 text-sm text-accent-foreground">
-              You are booking the{" "}
-              <strong>{packageName}</strong> package.
+              You Are Booking The <strong>{packageName}</strong> Package.
             </p>
           )}
 
-          <input
-            type="hidden"
-            name="package"
-            value={packageSlug}
-          />
+          <input type="hidden" name="package" value={packageSlug} />
 
           {status.state === "error" && (
             <div
               role="alert"
               className="mb-5 flex gap-3 rounded-md border border-destructive p-4 text-sm text-destructive"
             >
-              <CircleAlert
-                className="mt-0.5 size-4 shrink-0"
-                aria-hidden
-              />
+              <CircleAlert className="mt-0.5 size-4 shrink-0" aria-hidden />
               {status.message}
             </div>
           )}
 
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field
-              label="Full name"
-              name="name"
-              error={errors.name}
-            >
-              <Input
-                {...fieldProps("name")}
-                autoComplete="name"
-                required
-              />
+            <Field label="Full Name" name="name" error={errors.name}>
+              <Input {...fieldProps("name")} autoComplete="name" required />
             </Field>
 
-            <Field
-              label="Phone number"
-              name="phone"
-              error={errors.phone}
-            >
+            <Field label="Phone Number" name="phone" error={errors.phone}>
               <Input
                 {...fieldProps("phone")}
                 type="tel"
@@ -294,7 +248,7 @@ export function AppointmentForm({
             </Field>
 
             <Field
-              label="Email (optional)"
+              label="Email (Optional)"
               name="email"
               error={errors.email}
               className="sm:col-span-2"
@@ -314,13 +268,11 @@ export function AppointmentForm({
               <NativeSelect
                 {...fieldProps("department")}
                 value={department}
-                onChange={(e) =>
-                  onDepartmentChange(e.target.value)
-                }
+                onChange={(e) => onDepartmentChange(e.target.value)}
                 required
               >
                 <option value="" disabled>
-                  Select a department
+                  Select A Department
                 </option>
 
                 {departments.map((d) => (
@@ -332,20 +284,16 @@ export function AppointmentForm({
             </Field>
 
             <Field
-              label="Doctor (optional)"
+              label="Doctor (Optional)"
               name="doctor"
               error={errors.doctor}
             >
               <NativeSelect
                 {...fieldProps("doctor")}
                 value={selectedDoctor}
-                onChange={(e) =>
-                  setSelectedDoctor(e.target.value)
-                }
+                onChange={(e) => setSelectedDoctor(e.target.value)}
               >
-                <option value="">
-                  Any available doctor
-                </option>
+                <option value="">Any Available Doctor</option>
 
                 {visibleDoctors.map((d) => (
                   <option key={d.slug} value={d.slug}>
@@ -355,11 +303,7 @@ export function AppointmentForm({
               </NativeSelect>
             </Field>
 
-            <Field
-              label="Preferred date"
-              name="date"
-              error={errors.date}
-            >
+            <Field label="Preferred Date" name="date" error={errors.date}>
               <Input
                 {...fieldProps("date")}
                 type="date"
@@ -368,18 +312,10 @@ export function AppointmentForm({
               />
             </Field>
 
-            <Field
-              label="Preferred time"
-              name="time"
-              error={errors.time}
-            >
-              <NativeSelect
-                {...fieldProps("time")}
-                defaultValue=""
-                required
-              >
+            <Field label="Preferred Time" name="time" error={errors.time}>
+              <NativeSelect {...fieldProps("time")} defaultValue="" required>
                 <option value="" disabled>
-                  Select a time
+                  Select A Time
                 </option>
 
                 {appointmentSlots.map((slot) => (
@@ -391,15 +327,12 @@ export function AppointmentForm({
             </Field>
 
             <Field
-              label="Reason for visit (optional)"
+              label="Reason For Visit (Optional)"
               name="reason"
               error={errors.reason}
               className="sm:col-span-2"
             >
-              <Textarea
-                {...fieldProps("reason")}
-                rows={3}
-              />
+              <Textarea {...fieldProps("reason")} rows={3} />
             </Field>
           </div>
 
@@ -416,9 +349,7 @@ export function AppointmentForm({
               />
             )}
 
-            {submitting
-              ? "Sending request"
-              : "Request appointment"}
+            {submitting ? "Sending Request" : "Request Appointment"}
           </Button>
         </form>
       </CardContent>
@@ -448,10 +379,7 @@ function Field({
       {children}
 
       {error && (
-        <p
-          id={`${name}-error`}
-          className="mt-1.5 text-sm text-destructive"
-        >
+        <p id={`${name}-error`} className="mt-1.5 text-sm text-destructive">
           {error}
         </p>
       )}

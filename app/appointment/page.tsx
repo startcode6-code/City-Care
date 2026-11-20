@@ -23,11 +23,10 @@ type SearchParams = {
   package?: string;
 };
 
-export default async function AppointmentPage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
+export default async function AppointmentPage({ searchParams }: {
+  searchParams: Promise<SearchParams>
 }) {
+
   const { doctor, dept, package: pkg } = await searchParams;
 
   // Fetch doctors from backend API
@@ -36,30 +35,13 @@ export default async function AppointmentPage({
     return null;
   });
 
-  const doctors =
-    doctorResponse?.success && Array.isArray(doctorResponse.data)
-      ? doctorResponse.data
-      : [];
+  const doctors = doctorResponse?.success && Array.isArray(doctorResponse.data) ? doctorResponse.data : [];
 
   // Find selected doctor from API data
-  const selectedDoctor = doctors.find(
-    (d) => d.slug === doctor
-  );
-
-  const selectedPackage = packages.find(
-    (p) => p.slug === pkg
-  );
-
-  const departmentFromDoctor = selectedDoctor
-    ? departmentSlugFromName(selectedDoctor.department)
-    : undefined;
-
-  const requestedDepartment = departments.some(
-    (d) => d.slug === dept
-  )
-    ? dept
-    : undefined;
-
+  const selectedDoctor = doctors.find((d) => d.slug === doctor);
+  const selectedPackage = packages.find((p) => p.slug === pkg);
+  const departmentFromDoctor = selectedDoctor ? departmentSlugFromName(selectedDoctor.department) : undefined;
+  const requestedDepartment = departments.some((d) => d.slug === dept) ? dept : undefined;
   const minDate = new Date().toISOString().slice(0, 10);
 
   return (
